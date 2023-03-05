@@ -7,12 +7,12 @@ from flask import Blueprint, jsonify,request
 
 searchBox_api = Blueprint('searchBox_api', __name__)
 
-@searchBox_api.route("/user/search_user", methods=['GET'])
-def searchUsers():
+@searchBox_api.route("/user/search_user/<searchQuery>", methods=['GET'])
+def searchUsers(searchQuery):
     from app import mysql
     if request.method == 'GET':
 
-        searchQuery = request.json['search']
+        #searchQuery = request.json['search']
 
         search = '%' + searchQuery + '%'
         search = str(search)

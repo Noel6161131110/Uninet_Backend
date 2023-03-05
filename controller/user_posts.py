@@ -3,13 +3,13 @@ from datetime import datetime
 
 userPost_api = Blueprint('userPost_api', __name__)
 
-@userPost_api.route('/user/<uid>/add/post', methods = ['POST'])
-def uploadUserPost(uid):
+@userPost_api.route('/user/<uid>/add/post/<project_description>', methods = ['POST'])
+def uploadUserPost(uid,project_description):
     from app import mysql
     d = {}
     if request.method == 'POST':
         
-        project_description = request.json['project_description']
+        #project_description = request.json['project_description']
         
         uniqueIDposts = str(uid) + "posts"
         

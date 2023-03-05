@@ -56,12 +56,12 @@ def getUserProfileImage(uid):
     # else:
     #     return 'Method not allowed'
 
-@userAuth_api.route("/login_user", methods=['POST'])
-def login():
+@userAuth_api.route("/login_user/<email>/<password>", methods=['POST'])
+def login(email,password):
     from app import mysql
     if request.method == 'POST':
-        email = request.json['email']
-        password = request.json['password']
+        # email = request.json['email']
+        # password = request.json['password']
         
         cursor = mysql.cursor()
         cursor.execute('SELECT password_hash, email FROM user_info WHERE email = %s limit 0,1', [email])
@@ -97,26 +97,29 @@ def login():
             return jsonify(d)
 
             
-@userAuth_api.route('/sendOtp')
-def emailOtp():
-    email_id = request.json['email']
+@userAuth_api.route('/sendOtp/<email_id>')
+def emailOtp(email_id):
+    #email_id = request.json['email']
     
     otp = eOTP.send_email(email_id)
     
-    return jsonify(otp)
+    d = {}
+    
+    d["Otp"] = otp
+    return jsonify(d)
     
 
-@userAuth_api.route('/register_user', methods=['GET', 'POST'])
-def register():
+@userAuth_api.route('/register_user/<email>/<username>/<password>/<bio>/<headline>', methods=['GET', 'POST'])
+def register(email,username,password,bio,headline):
     d = {}
     from app import mysql
     if request.method == 'POST':
         
-        email = request.json['email']
-        username = request.json['username']
-        password = request.json['password']
-        bio = request.json['bio']
-        headline = request.json['headline']
+        # email = request.json['email']
+        # username = request.json['username']
+        # password = request.json['password']
+        # bio = request.json['bio']
+        # headline = request.json['headline']
         
         cursor = mysql.cursor()
         cursor.execute('SELECT * FROM user_info WHERE email = %s', [email])
@@ -174,6 +177,7 @@ def register():
             msg = 'You have successfully registered!'
             
             d['email'] = email
+            d['id'] = account1[0]
             d['username'] = username
             d['bio'] = bio
             d['headline'] = headline
